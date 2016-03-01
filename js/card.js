@@ -21,7 +21,6 @@ var Card = (function (_super) {
         this.shorterEdge = width > height ? height / 2 : width / 2;
         this.regX = width / 2;
         this.regY = height / 2;
-        this.addChild(this.text);
         this.on("mousedown", this.mousedown);
         this.on("pressmove", this.pressmove);
     };

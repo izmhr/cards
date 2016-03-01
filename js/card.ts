@@ -39,7 +39,7 @@ class Card extends createjs.Container {
     this.regX = width/2;
     this.regY = height/2;
 
-    this.addChild(this.text);
+    // this.addChild(this.text);
 
     // event handlers
     this.on("mousedown", this.mousedown);
