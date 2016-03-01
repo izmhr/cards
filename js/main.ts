@@ -90,7 +90,7 @@ class Main {
 
     // (3) normal bitmap
     let bmImage: HTMLImageElement = new Image();
-    bmImage.src = "../assets/P1060346.JPG";
+    bmImage.src = "/assets/P1060346.JPG";
     bmImage.onload = (ev: Event) => {
       let bitmap: createjs.Bitmap = new createjs.Bitmap(bmImage);
       bitmap.scaleX = bitmap.scaleY = 0.25;
@@ -109,7 +109,7 @@ class Main {
 
     // (5) spritesheet animation
     let ssImage: HTMLImageElement = new Image();
-    ssImage.src = "../assets/spritesheet_grant.png";
+    ssImage.src = "/assets/spritesheet_grant.png";
     ssImage.onload = (ev: Event) => {
       let spriteSheet: createjs.SpriteSheet = new createjs.SpriteSheet({
         framerate: 30,

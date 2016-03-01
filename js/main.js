@@ -53,7 +53,7 @@ var Main = (function () {
         cmplxCard.y = Math.random() * this.canvas.height;
         this.stage.addChild(cmplxCard);
         var bmImage = new Image();
-        bmImage.src = "../assets/P1060346.JPG";
+        bmImage.src = "/assets/P1060346.JPG";
         bmImage.onload = function (ev) {
             var bitmap = new createjs.Bitmap(bmImage);
             bitmap.scaleX = bitmap.scaleY = 0.25;
@@ -68,7 +68,7 @@ var Main = (function () {
         textCard.y = Math.random() * this.canvas.height;
         this.stage.addChild(textCard);
         var ssImage = new Image();
-        ssImage.src = "../assets/spritesheet_grant.png";
+        ssImage.src = "/assets/spritesheet_grant.png";
         ssImage.onload = function (ev) {
             var spriteSheet = new createjs.SpriteSheet({
                 framerate: 30,
