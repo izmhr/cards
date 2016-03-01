@@ -1,0 +1,14 @@
+body {
+	margin: 0;
+	width: 100%;
+  overflow: hidden;
+}
+
+#ui {
+	position: absolute;
+	right: 50px;
+	bottom: 70px;
+}
+#ui button {
+  height: 40px;
+}

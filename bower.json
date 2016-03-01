@@ -1,0 +1,22 @@
+{
+  "name": "cards",
+  "authors": [
+    "Atsushi.Izumihara <atsizumi@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "https://github.com/izmhr",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "EaselJS": "easeljs#^0.8.2",
+    "stats.js": "*"
+  }
+}
