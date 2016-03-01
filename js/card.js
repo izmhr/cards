@@ -5,27 +5,25 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Card = (function (_super) {
     __extends(Card, _super);
-    function Card() {
+    function Card(obj) {
         _super.call(this);
         this.text = new createjs.Text("rotation", "18px Arial", "#FFF");
+        if (obj) {
+            this.setObject(obj);
+        }
     }
-    Card.prototype.loadImage = function (filename, width) {
-        var _this = this;
-        var image = new Image();
-        image.src = filename;
-        image.onload = function (ev) {
-            var image = ev.target;
-            _this.bitmap = new createjs.Bitmap(image);
-            _this.width = width;
-            _this.bitmap.scaleX = _this.bitmap.scaleY = _this.width / _this.bitmap.image.width;
-            _this.height = _this.bitmap.image.height * _this.bitmap.scaleX;
-            _this.shorterEdge = _this.width > _this.height ? _this.height / 2 : _this.width / 2;
-            _this.bitmap.x = -_this.width / 2;
-            _this.bitmap.y = -_this.height / 2;
-            _super.prototype.addChild.call(_this, _this.bitmap, _this.text);
-            _this.on("mousedown", _this.mousedown);
-            _this.on("pressmove", _this.pressmove);
-        };
+    Card.prototype.setObject = function (obj) {
+        this.obj = obj;
+        this.addChild(this.obj);
+        var bounds = this.getBounds();
+        var width = bounds.width;
+        var height = bounds.height;
+        this.shorterEdge = width > height ? height / 2 : width / 2;
+        this.regX = width / 2;
+        this.regY = height / 2;
+        this.addChild(this.text);
+        this.on("mousedown", this.mousedown);
+        this.on("pressmove", this.pressmove);
     };
     Card.prototype.mousedown = function (ev) {
         this.lastTouch = { x: ev.stageX, y: ev.stageY };

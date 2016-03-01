@@ -2,7 +2,7 @@
 
 class Card extends createjs.Container {
 
-  private bitmap: createjs.Bitmap;
+  private obj: createjs.DisplayObject;
   private text: createjs.Text;  // for debug
 
   private width: number;
@@ -13,36 +13,39 @@ class Card extends createjs.Container {
   private handleLength: number;
   private power: number;
 
-  constructor() {
+  constructor(obj?: createjs.DisplayObject) {
     super();
     this.text = new createjs.Text("rotation", "18px Arial", "#FFF");
+    if(obj) {
+      this.setObject(obj);
+    }
   }
 
   /**
-   * 表示する画像とその横幅をセットします
-   * @param {string} filename 表示する画像
-   * @param {number} width    画像の横幅 px
+   * 対象のオブジェクトをセットします
+   * @param {createjs.DisplayObject} obj 対象のオブジェクト
    */
-  loadImage(filename: string, width: number): void {
-    let image = new Image();
-    image.src = filename;
-    image.onload = (ev: any) => {
-      let image: HTMLImageElement = ev.target;
-      this.bitmap = new createjs.Bitmap(image);
-      this.width = width;
-      this.bitmap.scaleX = this.bitmap.scaleY = this.width/this.bitmap.image.width;
-      this.height = this.bitmap.image.height * this.bitmap.scaleX;
-      this.shorterEdge = this.width > this.height ? this.height/2 : this.width/2;
-      this.bitmap.x = -this.width/2;
-      this.bitmap.y = -this.height/2;
+  setObject(obj: createjs.DisplayObject): void {
+    this.obj = obj;
+    this.addChild(this.obj);
 
-      super.addChild(this.bitmap, this.text);
+    let bounds: createjs.Rectangle = this.getBounds();
 
-      // event handlers
-      this.on("mousedown", this.mousedown);
-      this.on("pressmove", this.pressmove);
-    };
+    let width: number = bounds.width;
+    let height: number = bounds.height;
+    this.shorterEdge = width > height ? height/2 : width/2;
+    // this.obj.x = -width/2;
+    // this.obj.y = -height/2;
+    this.regX = width/2;
+    this.regY = height/2;
+
+    this.addChild(this.text);
+
+    // event handlers
+    this.on("mousedown", this.mousedown);
+    this.on("pressmove", this.pressmove);
   }
+
 
   mousedown(ev: any): void {
     this.lastTouch = {x: ev.stageX, y: ev.stageY};
@@ -85,7 +88,6 @@ class Card extends createjs.Container {
     if(newHandleAngle < -180) newHandleAngle += 360;
     this.lastHandleAngle = newHandleAngle;
 
-    // this.text.text = parseFloat(this.rotation).toFixed(1);
     this.text.text = this.rotation.toFixed(1);
 
     this.lastTouch = {x: ev.stageX, y: ev.stageY};

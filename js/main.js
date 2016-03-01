@@ -1,14 +1,6 @@
 window.onload = function () {
     new Main();
 };
-var images = [
-    "../assets/IMG_2760.JPG",
-    "../assets/IMG_5104.JPG",
-    "../assets/IMG_5275.JPG",
-    "../assets/P1060346.JPG",
-    "../assets/P1060484.JPG",
-    "../assets/P1060413.JPG"
-];
 var Main = (function () {
     function Main() {
         var _this = this;
@@ -24,7 +16,7 @@ var Main = (function () {
         window.addEventListener("resize", function () {
             _this.handleResize();
         });
-        this.loadImages();
+        this.createSampleObjects();
         createjs.Ticker.timingMode = createjs.Ticker.RAF;
         createjs.Ticker.on("tick", this.tick, this);
     }
@@ -37,17 +29,62 @@ var Main = (function () {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
     };
-    Main.prototype.loadImages = function () {
+    Main.prototype.createSampleObjects = function () {
         var _this = this;
-        images.forEach(function (value, index) {
-            var card = new Card();
-            var width = Math.random() * 100 + 200;
-            card.loadImage(value, width);
-            card.x = _this.canvas.width * Math.random();
-            card.y = _this.canvas.height * Math.random();
-            card.rotation = 360 * Math.random();
-            _this.stage.addChild(card);
-        });
+        var rectGraphics = new createjs.Graphics()
+            .beginFill("#00ffff").drawRect(0, 0, 200, 150);
+        var rect = new createjs.Shape(rectGraphics);
+        rect.setBounds(0, 0, 200, 150);
+        var rectCard = new Card(rect);
+        rectCard.x = Math.random() * this.canvas.width;
+        rectCard.y = Math.random() * this.canvas.height;
+        this.stage.addChild(rectCard);
+        var cmplxGraphics = new createjs.Graphics()
+            .beginFill("#ffff00").moveTo(0, 0)
+            .lineTo(100, 150)
+            .lineTo(240, 250)
+            .lineTo(300, 100)
+            .lineTo(100, 50)
+            .clone();
+        var cmplx = new createjs.Shape(cmplxGraphics);
+        cmplx.setBounds(0, 0, 300, 250);
+        var cmplxCard = new Card(cmplx);
+        cmplxCard.x = Math.random() * this.canvas.width;
+        cmplxCard.y = Math.random() * this.canvas.height;
+        this.stage.addChild(cmplxCard);
+        var bmImage = new Image();
+        bmImage.src = "../assets/P1060346.JPG";
+        bmImage.onload = function (ev) {
+            var bitmap = new createjs.Bitmap(bmImage);
+            bitmap.scaleX = bitmap.scaleY = 0.25;
+            var bmCard = new Card(bitmap);
+            bmCard.x = Math.random() * _this.canvas.width;
+            bmCard.y = Math.random() * _this.canvas.height;
+            _this.stage.addChild(bmCard);
+        };
+        var text = new createjs.Text("draggable\nobject", "bold 40px Arial", "#FFF");
+        var textCard = new Card(text);
+        textCard.x = Math.random() * this.canvas.width;
+        textCard.y = Math.random() * this.canvas.height;
+        this.stage.addChild(textCard);
+        var ssImage = new Image();
+        ssImage.src = "../assets/spritesheet_grant.png";
+        ssImage.onload = function (ev) {
+            var spriteSheet = new createjs.SpriteSheet({
+                framerate: 30,
+                images: [ssImage],
+                frames: { "height": 292, "count": 64, "width": 165 },
+                animations: {
+                    "run": [0, 25, "run", 1.5],
+                    "jump": [26, 63, "run"]
+                }
+            });
+            var grant = new createjs.Sprite(spriteSheet, "run");
+            var ssCard = new Card(grant);
+            ssCard.x = Math.random() * _this.canvas.width;
+            ssCard.y = Math.random() * _this.canvas.height;
+            _this.stage.addChild(ssCard);
+        };
     };
     return Main;
 }());

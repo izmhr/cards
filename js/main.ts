@@ -6,16 +6,6 @@ window.onload = () => {
   new Main();
 }
 
-// sample images
-var images = [
-  "../assets/IMG_2760.JPG",
-  "../assets/IMG_5104.JPG",
-  "../assets/IMG_5275.JPG",
-  "../assets/P1060346.JPG",
-  "../assets/P1060484.JPG",
-  "../assets/P1060413.JPG"
-]
-
 class Main {
 
   private stage: createjs.Stage;
@@ -41,7 +31,8 @@ class Main {
       this.handleResize()
     });
 
-    this.loadImages();
+    // create some sample draggable objects.
+    this.createSampleObjects();
 
     // create.js loop start
     createjs.Ticker.timingMode = createjs.Ticker.RAF;
@@ -67,21 +58,74 @@ class Main {
 	}
 
   /**
-   * load sample images
+   * create some sample draggable objects
    */
-  private loadImages(): void {
-    images.forEach((value: string, index: number)=>{
-      // create new card
-      let card: Card = new Card();
-      // set random width
-      let width: number = Math.random() * 100 + 200;
-      card.loadImage(value, width);
-      // set random position
-      card.x = this.canvas.width * Math.random();
-      card.y = this.canvas.height * Math.random();
-      card.rotation = 360 * Math.random();
-      // add to stage
-      this.stage.addChild(card);
-    });
+  private createSampleObjects(): void {
+
+    // (1) simple shape
+    let rectGraphics: createjs.Graphics = new createjs.Graphics()
+      .beginFill("#00ffff").drawRect(0, 0, 200, 150);
+    let rect: createjs.Shape = new createjs.Shape(rectGraphics);
+    // Easel.js does not support automatic bounds calculations of createjs.Shape
+    rect.setBounds(0, 0, 200, 150);
+    let rectCard: Card = new Card(rect);
+    rectCard.x = Math.random() * this.canvas.width;
+    rectCard.y = Math.random() * this.canvas.height;
+    this.stage.addChild(rectCard);
+
+    // (2) complex shape
+    let cmplxGraphics: createjs.Graphics = new createjs.Graphics()
+      .beginFill("#ffff00").moveTo(0, 0)
+      .lineTo(100, 150)
+      .lineTo(240, 250)
+      .lineTo(300, 100)
+      .lineTo(100, 50)
+      .clone();
+    let cmplx: createjs.Shape = new createjs.Shape(cmplxGraphics);
+    cmplx.setBounds(0, 0, 300, 250);
+    let cmplxCard: Card = new Card(cmplx);
+    cmplxCard.x = Math.random() * this.canvas.width;
+    cmplxCard.y = Math.random() * this.canvas.height;
+    this.stage.addChild(cmplxCard);
+
+    // (3) normal bitmap
+    let bmImage: HTMLImageElement = new Image();
+    bmImage.src = "../assets/P1060346.JPG";
+    bmImage.onload = (ev: Event) => {
+      let bitmap: createjs.Bitmap = new createjs.Bitmap(bmImage);
+      bitmap.scaleX = bitmap.scaleY = 0.25;
+      let bmCard: Card = new Card(bitmap);
+      bmCard.x = Math.random() * this.canvas.width;
+      bmCard.y = Math.random() * this.canvas.height;
+      this.stage.addChild(bmCard);
+    }
+
+    // (4) Text
+    let text: createjs.Text = new createjs.Text("draggable\nobject", "bold 40px Arial", "#FFF");
+    let textCard: Card = new Card(text);
+    textCard.x = Math.random() * this.canvas.width;
+    textCard.y = Math.random() * this.canvas.height;
+    this.stage.addChild(textCard);
+
+    // (5) spritesheet animation
+    let ssImage: HTMLImageElement = new Image();
+    ssImage.src = "../assets/spritesheet_grant.png";
+    ssImage.onload = (ev: Event) => {
+      let spriteSheet: createjs.SpriteSheet = new createjs.SpriteSheet({
+        framerate: 30,
+        images: [ssImage],
+        // frames: {"regX": 82, "height": 292, "count": 64, "regY": 0, "width": 165},
+        frames: {"height": 292, "count": 64,"width": 165},
+        animations: {
+					"run": [0, 25, "run", 1.5],
+					"jump": [26, 63, "run"]
+				}
+      });
+      let grant: createjs.Sprite = new createjs.Sprite(spriteSheet, "run");
+      let ssCard: Card = new Card(grant);
+      ssCard.x = Math.random() * this.canvas.width;
+      ssCard.y = Math.random() * this.canvas.height;
+      this.stage.addChild(ssCard);
+    }
   }
 }
